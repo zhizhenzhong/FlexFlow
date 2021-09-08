@@ -19,28 +19,25 @@ echo " Defaults for Linux machine"
 BUILD_TYPE=Release
 
 # set CUDA Arch, replace xx with your GPU architecture
-#FF_CUDA_ARCH=xx
+FF_CUDA_ARCH=80
 
 # set CUDNN dir in case cmake cannot autodetect a path
 CUDNN_DIR=/usr/local/cuda
 
 # set CUDA dir in case cmake cannot autodetect a path
-#CUDA_DIR=/usr/local/cuda
+CUDA_DIR=/usr/local/cuda
 
 # enable Python
 FF_USE_PYTHON=ON
 
 # enable NCCL
-FF_USE_NCCL=OFF
+FF_USE_NCCL=ON
 
 # enable GASNet
-FF_USE_GASNET=OFF
-
-# select GASNET conduit
-FF_GASNET_CONDUIT=ibv
+FF_USE_GASNET=ON
 
 # build C++ examples
-FF_BUILD_ALL_EXAMPLES=OFF
+FF_BUILD_ALL_EXAMPLES=ON
 
 # enable avx2
 FF_USE_AVX2=OFF
