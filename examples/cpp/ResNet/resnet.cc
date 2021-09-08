@@ -177,7 +177,7 @@ DataLoader::DataLoader(FFModel& ff,
   num_samples = 0;
   if (resnet.dataset_path == "") {
     log_app.print("Use random dataset...");
-    num_samples = 10 * ff.config.batchSize * ff.config.workersPerNode * ff.config.numNodes;
+    num_samples = 100 * ff.config.batchSize;
     log_app.print("Number of random samples = %d\n", num_samples);
   } else {
     log_app.print("Start loading dataset from %s", resnet.dataset_path.c_str());
@@ -295,8 +295,11 @@ void DataLoader::load_entire_dataset(const Task *task,
   assert(rect_input.hi[3] - rect_input.lo[3] + 1 == num_samples);
   if (resnet->dataset_path.length() == 0) {
     log_app.print("Start generating random input samples");
+    for (size_t i = 0; i < rect_input.volume(); i++)
+      input_ptr[i] = 0.1f;
     for (size_t i = 0; i < rect_label.volume(); i++)
-      label_ptr[i] = std::rand() % 10;
+      // label_ptr[i] = std::rand() % 10;
+      label_ptr[i] = 0;
     return;
   }
   log_app.print("Start loading %d samples from %s\n",
