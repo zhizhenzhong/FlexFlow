@@ -133,14 +133,12 @@ void top_level_task(const Task* task,
       } else {
         data_loader.next_batch(ff);
       }
-      if (epoch > 0)
-        runtime->begin_trace(ctx, 111/*trace_id*/);
+      runtime->begin_trace(ctx, 111/*trace_id*/);
       ff.forward();
       ff.zero_gradients();
       ff.backward();
       ff.update();
-      if (epoch > 0)
-        runtime->end_trace(ctx, 111/*trace_id*/);
+      runtime->end_trace(ctx, 111/*trace_id*/);
     }
   }
   // End timer
@@ -177,13 +175,15 @@ DataLoader::DataLoader(FFModel& ff,
   num_samples = 0;
   if (resnet.dataset_path == "") {
     log_app.print("Use random dataset...");
-    num_samples = 100 * ff.config.batchSize;
+    num_samples = 10 * ff.config.batchSize * ff.config.workersPerNode * ff.config.numNodes;
     log_app.print("Number of random samples = %d\n", num_samples);
   } else {
     log_app.print("Start loading dataset from %s", resnet.dataset_path.c_str());
     size_t filesize = get_file_size(resnet.dataset_path);
     assert(filesize % (3 * 360 * 360 + 1) == 0);
     num_samples = filesize / (3 * 360 * 360 + 1);
+    // assert(filesize % (3 * 32 * 32 + 1) == 0);
+    // num_samples = filesize / (3 * 32 * 32 + 1);
   }
   // Create full input
   {

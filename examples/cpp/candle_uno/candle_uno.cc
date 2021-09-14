@@ -169,14 +169,14 @@ void top_level_task(const Task* task,
   double ts_end = Realm::Clock::current_time_in_microseconds();
   double run_time = 1e-6 * (ts_end - ts_start);
   printf("ELAPSED TIME = %.4fs, THROUGHPUT = %.2f samples/s\n", run_time,
-         ff_config.iterations * ff_config.epochs * ff_config.batchSize / run_time);
+         data_loader.num_samples * ff_config.epochs / run_time);
 }
 
 void parse_input_args(char **argv, int argc, CandleConfig& config)
 {
   for (int i = 1; i < argc; i++) {
     if (!strcmp(argv[i], "--dense-layers")) {
-      std::stringstream ss(std::string(argv[++i]));
+      std::stringstream ss = std::stringstream(std::string(argv[++i]));
       std::string word;
       config.dense_layers.clear();
       while (std::getline(ss, word, '-')) {
@@ -185,7 +185,7 @@ void parse_input_args(char **argv, int argc, CandleConfig& config)
       continue;
     }
     if (!strcmp(argv[i], "--dense-feature-layers")) {
-      std::stringstream ss(std::string(argv[++i]));
+      std::stringstream ss = std::stringstream(std::string(argv[++i]));
       std::string word;
       config.dense_feature_layers.clear();
       while (std::getline(ss, word, '-')) {
